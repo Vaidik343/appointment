@@ -16,7 +16,7 @@ const Appointment = () => {
           <a href="/login" className="underline ml-2">Go to Login</a>
         </div>
       </div>
-    )
+    ) 
   }
 
   const [formData, setFormData] = useState({

@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import { usePatient } from '../context/PatientContext'
 
-// import { useNavigate } from 'react-router-dom';
+import {Link, useNavigate } from 'react-router-dom';
 
 
 const Patient = () => {
    const {loading, createPatient} = usePatient();
-  //  const navigate = useNavigate();
+   const navigate = useNavigate();
    const [form , setForm] = useState({
     name: "",
     dob: "",
@@ -37,7 +37,7 @@ const handleSubmit = async (e) => {
     });
 
     // redirect to login page
-    // navigate("/login");
+    navigate("/login");
   }
 };
 
@@ -95,6 +95,9 @@ const handleSubmit = async (e) => {
                  disabled={loading}
                  onClick={handleSubmit}
                 >Submit</button>
+
+                
+                     <span><Link path='/login'>Already register</Link></span>
             </div>
 
     </div>

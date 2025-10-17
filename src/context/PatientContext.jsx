@@ -9,18 +9,21 @@ export const PatientProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
     const [patient, setPatient] = useState(null);
 
-  // Load patient data on mount if available (e.g., from localStorage or API)
-  useEffect(() => {
-    const loadPatient = async () => {
-      // Assuming patient ID is stored in localStorage after login
-      const patientId = localStorage.getItem('patientId');
-      if (patientId) {
-        const patientData = await getPatientById(patientId);
-        setPatient(patientData);
-      }
-    };
-    loadPatient();
-  }, []);
+ 
+const loginPatient = async () => {
+  setLoading(true);
+  try {
+    const res = await api.post(ENDPOINTS.PATIENTS.LOGIN)
+       toast.success("Login successfully!");
+       return res;
+  } catch (error) {
+    console.log("🚀 ~ loginPatient ~ error:", error)
+    
+  }  finally {
+    setLoading(false)
+  }
+
+}
 
   // Create/Register patient
   const createPatient = async (payload) => {
@@ -52,7 +55,7 @@ export const PatientProvider = ({ children }) => {
   }
 
   return (
-    <PatientContext.Provider value={{ createPatient, getPatientById,patient , loading }}>
+    <PatientContext.Provider value={{ loginPatient,createPatient, getPatientById,patient , loading }}>
       {children}
     </PatientContext.Provider>
   );

@@ -1,48 +1,43 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-// Contexts
+//contexts
 import { PatientProvider } from "./context/PatientContext";
 import { DoctorProvider } from "./context/DoctorContext";
+import { ServiceProvider } from "./context/ServiceContext";
 import { AppointmentProvider } from "./context/AppointmentContext";
 import { BillProvider } from "./context/BillContext";
-import { ServiceProvider } from "./context/ServiceContext";
-
-// Pages
-import Patient from "./pages/Patient"; // Registration
-import Login from "./pages/Login"; // you should create Login page
+import Patient from "./pages/Patient";
+import Login from "./components/Login";
 import Doctor from "./pages/Doctor";
-import PatientProfile from "./pages/PatientProfile";
 import Service from "./pages/Service";
-
 import Appointment from "./pages/Appointment";
-// import Bills from "./pages/Bills"; // optional: show patient bills
 
-function App() {
+const App = () => {
   return (
-    <Router>
+    <BrowserRouter>
       <Toaster />
       <PatientProvider>
         <DoctorProvider>
-          <AppointmentProvider>
-            <BillProvider>
-              <ServiceProvider>
+          <ServiceProvider>
+            <AppointmentProvider>
+           
                 <Routes>
                   <Route path="/" element={<Patient />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/doctor" element={<Doctor />} />
-                  <Route path="/profile" element={<PatientProfile />} />
                   <Route path="/service" element={<Service />} />
-                  <Route path="/appointment" element={<Appointment />} />
+                  <Route path="/book-appointment" element={<Appointment />} />
+                  
                 </Routes>
-              </ServiceProvider>
-            </BillProvider>
-          </AppointmentProvider>
+  
+            </AppointmentProvider>
+          </ServiceProvider>
         </DoctorProvider>
       </PatientProvider>
-    </Router>
+    </BrowserRouter>
   );
-}
+};
 
 export default App;
