@@ -16,7 +16,7 @@ export const ServiceProvider = ({children}) => {
             setLoading(true)
             const res = await api.get(ENDPOINTS.SERVICE.ALL)
             console.log("🚀 ~ fetchService ~ res:", res)
-            setServices(res.data.service)
+            setServices(res.data)
         } catch (error) {
             console.log("🚀 ~ fetchService ~ error:", error)
               toast.error("Failed to load services");

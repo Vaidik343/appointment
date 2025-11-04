@@ -1,31 +1,51 @@
-import React, { useEffect } from 'react'
-import { useService } from '../context/ServiceContext'
-import ServiceCard from '../components/ServiceCard';
+import React, { useEffect } from "react";
+import { useService } from "../context/ServiceContext";
+import ServiceCard from "../components/ServiceCard";
+import { Box, Typography, CircularProgress } from "@mui/material";
 
 const Service = () => {
-   const {services, loading, fetchService} = useService();
+  const { services, loading, fetchService } = useService();
 
-   useEffect( ()=> {
+  useEffect(() => {
     fetchService();
-   }, []);
+  }, []);
 
- if (loading)
+  if (loading)
     return (
-      <p className="text-center mt-10 text-blue-500">Loading Services...</p>
+      <Box display="flex" justifyContent="center" alignItems="center" height="60vh">
+        <CircularProgress />
+      </Box>
     );
 
   return (
-    <div className='service'>
-      {services && services.length > 0 ? (
-        services.map( (ser) => (
-            <ServiceCard key={ser.id}  services={ser}/>
-        ))
-      ): (
-        <span>No services..</span>
-      )}
+    <Box sx={{ p: 3 }}>
+      <Typography
+        variant="h4"
+        textAlign="center"
+        color="primary"
+        fontWeight="bold"
+        gutterBottom
+      >
+        Available Services
+      </Typography>
 
-    </div>
-  )
-}
+      <Box
+        display="flex"
+        flexWrap="wrap"
+        justifyContent="center"
+        gap={2}
+        sx={{ mt: 2 }}
+      >
+        {services?.length > 0 ? (
+          services.map((s) => <ServiceCard key={s.id} services={s} />)
+        ) : (
+          <Typography variant="body1" color="text.secondary">
+            No services available.
+          </Typography>
+        )}
+      </Box>
+    </Box>
+  );
+};
 
-export default Service
+export default Service;

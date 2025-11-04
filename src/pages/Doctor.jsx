@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
 import { useDoctor } from "../context/DoctorContext";
 import DoctorCard from "../components/DoctorCard";
-
-
+import { Box, Grid, Typography, CircularProgress } from "@mui/material";
 
 const Doctor = () => {
   const { doctor, loading, fetchDoctor } = useDoctor();
@@ -10,23 +9,52 @@ const Doctor = () => {
   useEffect(() => {
     fetchDoctor();
   }, []);
- 
 
   if (loading)
     return (
-      <p className="text-center mt-10 text-blue-500">Loading doctors...</p>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "70vh",
+        }}
+      >
+        <CircularProgress color="primary" />
+      </Box>
     );
 
-
-    
   return (
-    <div className="doctor">
+    <Box sx={{ p: 4 }}>
+      <Typography
+        variant="h4"
+        fontWeight="bold"
+        textAlign="center"
+        color="primary"
+        gutterBottom
+      >
+        Available Doctors
+      </Typography>
+
       {doctor && doctor.length > 0 ? (
-        doctor.map((doc) => <DoctorCard key={doc.id} doctor={doc} />)
+        <Grid container spacing={3} justifyContent="center">
+          {doctor.map((doc) => (
+            <Grid item key={doc.id}>
+              <DoctorCard doctor={doc} />
+            </Grid>
+          ))}
+        </Grid>
       ) : (
-        <p className="text-center text-gray-500 mt-6">No doctors found...</p>
+        <Typography
+          variant="body1"
+          color="text.secondary"
+          textAlign="center"
+          sx={{ mt: 4 }}
+        >
+          No doctors found.
+        </Typography>
       )}
-    </div>
+    </Box>
   );
 };
 

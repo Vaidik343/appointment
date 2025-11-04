@@ -11,7 +11,7 @@ export const ENDPOINTS = {
     APPOINTMENTS: {
         // ALL: "/appointment",
         CREATE: "/appointment",
-        CANCEL: (id) =>`/appointment/${id}`, //cancel appointment
+        CANCEL: (id) =>`/appointment/cancel/${id}`, //cancel appointment
         BY_PATIENT_ID: (id) =>`/appointment/${id}`,   //appoinment by patient id
     },
     

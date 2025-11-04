@@ -13,6 +13,7 @@ import Login from "./components/Login";
 import Doctor from "./pages/Doctor";
 import Service from "./pages/Service";
 import Appointment from "./pages/Appointment";
+import PatientProfile from "./pages/PatientProfile";
 
 const App = () => {
   return (
@@ -29,6 +30,7 @@ const App = () => {
                   <Route path="/doctor" element={<Doctor />} />
                   <Route path="/service" element={<Service />} />
                   <Route path="/book-appointment" element={<Appointment />} />
+                  <Route path="/patient-profile" element={<PatientProfile />} />
                   
                 </Routes>
   

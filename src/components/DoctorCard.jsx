@@ -1,25 +1,56 @@
 import React from "react";
-
-import { useDoctor } from "../context/DoctorContext";
+import {
+  Card,
+  CardContent,
+  Typography,
+  Button,
+  CardActions,
+  Box,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 const DoctorCard = ({ doctor }) => {
   const navigate = useNavigate();
-  console.log("🚀 ~ DoctorCard ~ navigate:", navigate);
 
   const handleBook = () => {
     navigate(`/book-appointment/${doctor.id}`);
   };
-  return ( 
-    <div className="doctorCard p-4 bg-blue-500 text-white rounded">
-      <div key={doctor.id}>
-        <p>Name:{doctor.name}</p>
-        <p>specialization:{doctor.specialization}</p>
-        <p>contact:{doctor.contact}</p>
-        
-      </div>
-      <button onClick={handleBook}>Book Appointment</button>
-    </div>
+
+  return (
+    <Card
+      sx={{
+        width: 320,
+        borderRadius: 3,
+        boxShadow: 3,
+        transition: "transform 0.2s ease-in-out",
+        "&:hover": { transform: "translateY(-4px)", boxShadow: 6 },
+        bgcolor: "background.paper",
+      }}
+    >
+      <CardContent>
+        <Typography variant="h6" fontWeight="bold" color="primary" gutterBottom>
+          {doctor.name}
+        </Typography>
+        <Typography variant="body1" color="text.secondary">
+          <strong>Specialization:</strong> {doctor.specialization}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          <strong>Contact:</strong> {doctor.contact}
+        </Typography>
+      </CardContent>
+
+      <CardActions>
+        <Box sx={{ flexGrow: 1 }} />
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleBook}
+          sx={{ borderRadius: 2, textTransform: "none" }}
+        >
+          Book Appointment
+        </Button>
+      </CardActions>
+    </Card>
   );
 };
 

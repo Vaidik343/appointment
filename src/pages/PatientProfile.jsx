@@ -1,15 +1,18 @@
 import React from 'react'
-import { useAppointment } from '../context/AppointmentContext'
-import {usePatient} from '../context/PatientContext'
-import {useBill} from '../context/BillContext'
 
+import MyAppointments from '../components/MyAppointments'
+import MyBills from '../components/MyBills'
 
 const PatientProfile = () => {
 
-   const {  
-       appointments, getAppointmentByPatientId,cancelAppointment } = useAppointment
+   
   return (
-    <div>PatientProfile</div>
+    <div>
+
+      <MyAppointments />
+      <MyBills />
+
+    </div>
   )
 }
 

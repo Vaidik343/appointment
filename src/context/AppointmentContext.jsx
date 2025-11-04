@@ -10,12 +10,12 @@ const AppointmentContext = createContext();
   const [loading, setLoading] = useState(false);
 
   const createAppointment = async (payload) => {
+    setLoading(true);
     try {
-      setLoading(true);
       const { data } = await api.post(ENDPOINTS.APPOINTMENTS.CREATE, payload);
       toast.success("Appointment book successfully");
       setAppointments((prev) => [...prev, data]);
-      return data;
+      return true;
     } catch (error) {
       toast.error(
         error.response?.data?.message || "Failed to book appointment"

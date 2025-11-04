@@ -7,15 +7,21 @@ const PatientContext = createContext();
 
 export const PatientProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
-    const [patient, setPatient] = useState(null);
+    const [patient, setPatient] = useState(
+      JSON.parse(localStorage.getItem("patient")) || null
+    );
 
  
-const loginPatient = async () => {
+const loginPatient = async (payload) => {
   setLoading(true);
   try {
-    const res = await api.post(ENDPOINTS.PATIENTS.LOGIN)
-       toast.success("Login successfully!");
-       return res;
+ const { data } = await api.post(ENDPOINTS.PATIENTS.LOGIN, payload);
+toast.success("Login successfully!");
+setPatient(data.patient);
+localStorage.setItem("patient", JSON.stringify(data.patient));
+localStorage.setItem("token", data.token);
+return true;
+
   } catch (error) {
     console.log("🚀 ~ loginPatient ~ error:", error)
     
