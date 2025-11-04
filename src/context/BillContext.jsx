@@ -14,8 +14,9 @@ export const BillProvider = ({children}) => {
       try {
          setLoading(true)
          const {data} = await api.get(ENDPOINTS.BILLS.BY_PATIENT(patientId))
+         console.log("🚀 ~ getPatientBills ~ data:", data)
          setBills(data.bills || data)
-         console.log("🚀 ~ getPatientBill ~ res:", res)
+         
          return data
       } catch (error) {
          console.log("🚀 ~ getPatientBill ~ error:", error)
@@ -25,10 +26,12 @@ export const BillProvider = ({children}) => {
       }
 
    }
-
-  <BillContext.Provider value={{bills, loading, getPatientBills}}>
+return (
+     <BillContext.Provider value={{bills, loading, getPatientBills}}>
    {children}
   </BillContext.Provider>
+)
+
 }
 
 export const useBill = () => useContext(BillContext);

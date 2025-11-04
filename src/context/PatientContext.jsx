@@ -31,6 +31,21 @@ return true;
 
 }
 
+
+//logout
+
+const logoutPatient = async() => {
+  try {
+    await api.post(ENDPOINTS.PATIENTS.LOGOUT)
+    localStorage.removeItem("token");
+     toast.success("Logged out successfully!");
+     
+  } catch (error) {
+    console.log("🚀 ~ logoutPatient ~ error:", error)
+    
+  }
+}
+
   // Create/Register patient
   const createPatient = async (payload) => {
     setLoading(true);
@@ -61,7 +76,7 @@ return true;
   }
 
   return (
-    <PatientContext.Provider value={{ loginPatient,createPatient, getPatientById,patient , loading }}>
+    <PatientContext.Provider value={{ loginPatient,createPatient,logoutPatient, getPatientById,patient , loading }}>
       {children}
     </PatientContext.Provider>
   );

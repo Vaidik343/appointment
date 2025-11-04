@@ -3,7 +3,8 @@ export const ENDPOINTS = {
         // ALL:"/patient",
         CREATE:"/patient",
         BY_ID: (id) =>`/patient/${id}`,  
-        LOGIN: '/patient/login'
+        LOGIN: '/patient/login',
+        LOGOUT: 'patient/logout'
         // UPDATE_BY_ID:(id) =>`/patient/${id}`,
         // DELETE:(id) =>`/patient/${id}`,
     },

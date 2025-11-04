@@ -23,6 +23,7 @@ const App = () => {
         <DoctorProvider>
           <ServiceProvider>
             <AppointmentProvider>
+              <BillProvider>
            
                 <Routes>
                   <Route path="/" element={<Patient />} />
@@ -33,7 +34,7 @@ const App = () => {
                   <Route path="/patient-profile" element={<PatientProfile />} />
                   
                 </Routes>
-  
+              </BillProvider>
             </AppointmentProvider>
           </ServiceProvider>
         </DoctorProvider>
