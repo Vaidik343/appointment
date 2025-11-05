@@ -1,20 +1,30 @@
 import React, { useEffect, useState } from "react";
+import {
+  MenuItem,
+  Paper,
+  Grid,
+  TextField,
+  Box,
+  Typography,
+  Button,
+  Stack,
+  Divider,
+} from "@mui/material";
 import { useDoctor } from "../context/DoctorContext";
 import { useAppointment } from "../context/AppointmentContext";
 import { useService } from "../context/ServiceContext";
 import { usePatient } from "../context/PatientContext";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { MenuItem, Paper, Stack, TextField,Box, Typography , Button} from "@mui/material";
+import Lottie from "lottie-react";
+import uploadCompleteAnimation from "../assets/Upload Complete.json";
 
 const AppointmentForm = () => {
   const { doctor, fetchDoctor } = useDoctor();
-  const {  createAppointment, loading } = useAppointment();
-  console.log("🚀 ~ AppointmentForm ~ createAppointment:", createAppointment)
+  const { createAppointment, loading } = useAppointment();
   const { services, fetchService } = useService();
-  // console.log("🚀 ~ AppointmentForm ~ services:", services)
   const { patient } = usePatient();
-  console.log("🚀 ~ AppointmentForm ~ patient:", patient)
+
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -23,6 +33,8 @@ const AppointmentForm = () => {
     start_time: "",
     end_time: "",
   });
+
+  const [isSuccess, setIsSuccess] = useState(false); // ✅ success state
 
   useEffect(() => {
     if (!patient) {
@@ -39,10 +51,12 @@ const AppointmentForm = () => {
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!form.doctor_id || !form.start_time || !form.end_time) {
-      alert("Please fill all fields");
+      toast.error("Please fill all required fields");
       return;
     }
 
@@ -55,101 +69,138 @@ const AppointmentForm = () => {
       status: "Scheduled",
     };
 
-   const apt = await createAppointment(payload);
-  //  console.log("🚀 ~ handleSubmit ~ apt:", apt)
-console.log("Booking payload:", payload);
-
-   if(apt)
-   {
-    setForm("")
-  navigate("/patient-profile");
-   }
-
+    const apt = await createAppointment(payload);
+    if (apt) {
+      setIsSuccess(true); // ✅ show animation
+    }
   };
 
-  return( 
-  <Box>
-    <Paper>
+  if (isSuccess) {
+    return (
+     
 
-      <Typography variant="h5" fontWeight="bold" textAlign="center">
+      
+      <Box 
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "50vh",
+          textAlign: "center",
+          mt: 4,
+       
+        }}
+      >
+        <Lottie
+          animationData={uploadCompleteAnimation}
+          loop={false}
+          style={{ width: 200, height: 200 }}
+        />
+        <Typography variant="h5" fontWeight="bold" mt={2}>
+          Appointment Booked
+        </Typography>
+        <Typography variant="body2" color="text.secondary" mt={1}>
+          Your appointment has been successfully booked
+        </Typography>
+
+       
+      </Box>
+     
+    );
+  }
+
+  return (
+    <Box sx={{ maxWidth: 700, mx: "auto", mt: 4, px: 2 }}>
+      <Paper sx={{ p: 4, borderRadius: 3, boxShadow: 3 }}>
+        <Typography variant="h5" fontWeight="bold" textAlign="center" gutterBottom>
           Book an Appointment
         </Typography>
 
         <form onSubmit={handleSubmit}>
-          <Stack>
-
-            {/* doctor list */}
-               <TextField 
-                 select
-                 label="Select doctor"
-                 value={form.doctor_id}
-                 name="doctor_id"
-                 onChange={handleChange}
-                  
-                 required
-               >
-                <MenuItem>--Choose Doctor--
-                </MenuItem>
-                {
-                  doctor?.map((doc) =>(
-                    <MenuItem key={doc.id} value={doc.id}> {doc.name}--({doc.specialization})</MenuItem>
-                  ))
-                }
-
-               </TextField>
-               <TextField 
-                 select
-                 label="Select Service"
-                 value={form.service_id}
-                 name="service_id"
-                 onChange={handleChange}
-                  
-                 required
-               >
-                <MenuItem>--Choose Service--
-                </MenuItem>
-                {
-                  services?.map((srv) =>(
-                    <MenuItem key={srv.id} value={srv.id}> {srv.name} - ₹{srv.cost}</MenuItem>
-                  ))
-                }
-
-               </TextField>
-
-               {/* date */}
-
+          <Grid container rowSpacing={3} columnSpacing={3}>
+            {/* Row 1: Doctor + Service */}
+            <Grid size={{ xs: 12, sm: 6 }}>
               <TextField
-              label="Start Time"
-              name="start_time"
-              type="datetime-local"
-              value={form.start_time}
-              onChange={handleChange}
-              InputLabelProps={{ shrink: true }}
-               
-              required
-            />
+                fullWidth
+                select
+                label="Select Doctor"
+                name="doctor_id"
+                value={form.doctor_id}
+                onChange={handleChange}
+                required
+              >
+                <MenuItem value="">-- Choose Doctor --</MenuItem>
+                {doctor?.map((doc) => (
+                  <MenuItem key={doc.id} value={doc.id}>
+                    {doc.name} ({doc.specialization})
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
 
-            <TextField
-              label="End Time"
-              name="end_time"
-              type="datetime-local"
-              value={form.end_time}
-              onChange={handleChange}
-              InputLabelProps={{ shrink: true }}
-               
-              required
-            />
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <TextField
+                fullWidth
+                select
+                label="Select Service"
+                name="service_id"
+                value={form.service_id}
+                onChange={handleChange}
+                required
+              >
+                <MenuItem value="">-- Choose Service --</MenuItem>
+                {services?.map((srv) => (
+                  <MenuItem key={srv.id} value={srv.id}>
+                    {srv.name} – ₹{srv.cost}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
 
+            {/* Row 2: Start + End Time */}
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <TextField
+                fullWidth
+                label="Start Time"
+                name="start_time"
+                type="datetime-local"
+                value={form.start_time}
+                onChange={handleChange}
+                InputLabelProps={{ shrink: true }}
+                required
+              />
+            </Grid>
 
-                  <Button type="submit" variant="contained"   disabled={loading}>
-              {loading ? "Booking..." : "Book Appointment"}
-            </Button>
-          </Stack>
+            <Grid size={{ xs: 12, sm: 6 }}>
+              <TextField
+                fullWidth
+                label="End Time"
+                name="end_time"
+                type="datetime-local"
+                value={form.end_time}
+                onChange={handleChange}
+                InputLabelProps={{ shrink: true }}
+                required
+              />
+            </Grid>
+
+            {/* Submit Button */}
+            <Grid size={12} sx={{ textAlign: "center", mt: 2 }}>
+              <Button
+                type="submit"
+                variant="contained"
+                size="large"
+                disabled={loading}
+                sx={{ borderRadius: 2, px: 4 }}
+              >
+                {loading ? "Booking..." : "Book Appointment"}
+              </Button>
+            </Grid>
+          </Grid>
         </form>
-     
-    </Paper>
-
-  </Box>
+      </Paper>
+    </Box>
   );
 };
 

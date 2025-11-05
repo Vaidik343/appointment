@@ -14,6 +14,7 @@ import Doctor from "./pages/Doctor";
 import Service from "./pages/Service";
 import Appointment from "./pages/Appointment";
 import PatientProfile from "./pages/PatientProfile";
+import Navbar from "./components/Navbar";
 
 const App = () => {
   return (
@@ -24,7 +25,7 @@ const App = () => {
           <ServiceProvider>
             <AppointmentProvider>
               <BillProvider>
-           
+           <Navbar />
                 <Routes>
                   <Route path="/" element={<Patient />} />
                   <Route path="/login" element={<Login />} />

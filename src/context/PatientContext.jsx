@@ -76,7 +76,7 @@ const logoutPatient = async() => {
   }
 
   return (
-    <PatientContext.Provider value={{ loginPatient,createPatient,logoutPatient, getPatientById,patient , loading }}>
+    <PatientContext.Provider value={{ loginPatient,createPatient,logoutPatient, getPatientById, patient , loading }}>
       {children}
     </PatientContext.Provider>
   );
