@@ -8,7 +8,7 @@ const DoctorContext = createContext();
 export  const DoctorProvider = ({children}) => {
     const [doctor, setDoctor] = useState([])
     const [loading , setLoading] = useState(false)
- 
+
     const fetchDoctor = async () => {
         try {
              setLoading(true)
@@ -24,6 +24,10 @@ export  const DoctorProvider = ({children}) => {
         }
 
     }
+
+    useEffect(() => {
+        fetchDoctor();
+    }, []);
 
     const doctorById = async (id) => {
         try {

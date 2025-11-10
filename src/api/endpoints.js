@@ -2,7 +2,7 @@ export const ENDPOINTS = {
     PATIENTS: {
         // ALL:"/patient",
         CREATE:"/patient",
-        BY_ID: (id) =>`/patient/${id}`,  
+        BY_ID: (id) =>`/patient/${id}`,
         LOGIN: '/patient/login',
         LOGOUT: 'patient/logout'
         // UPDATE_BY_ID:(id) =>`/patient/${id}`,
@@ -15,7 +15,7 @@ export const ENDPOINTS = {
         CANCEL: (id) =>`/appointment/cancel/${id}`, //cancel appointment
         BY_PATIENT_ID: (id) =>`/appointment/${id}`,   //appoinment by patient id
     },
-    
+
     BILLS: {
     // ALL: "/bill",
     // CREATE: "/bill",
@@ -39,5 +39,15 @@ export const ENDPOINTS = {
         // UPDATE_BY_ID:(id) =>`/service/${id}`,
         // DELETE:(id) =>`/service/${id}`
 
+    },
+
+    GENERAL_SERVICES: {
+        ALL: "general",
+        BY_ID: (id) => `general/${id}`,
+    },
+
+    DOCTOR_SERVICES: {
+        ALL: "doctor-services",
+        BY_ID: (id) => `doctor-services/${id}`,
     }
 }

@@ -1,8 +1,12 @@
-# Appointment.jsx Development Tasks
+# TODO: Update Patient Frontend for New Service Models
 
-- [x] Import necessary hooks (useAppointment, usePatient, useDoctor)
-- [x] Add useEffect to fetch appointments and doctors on component mount
-- [x] Add loading spinner display when loading
-- [x] Render list of current appointments with details and cancel buttons
-- [x] Render form for booking new appointments (doctor dropdown, datetime inputs)
-- [x] Handle form submission and validation for creating appointments
+## Tasks
+- [x] Update ENDPOINTS in src/api/endpoints.js to include new service endpoints
+- [x] Modify ServiceContext to fetch both general and doctor services
+- [x] Update Service page to display services categorized by type
+- [x] Update ServiceCard to show category/doctor info
+- [x] Update AppointmentForm to handle service selection from both types
+- [x] Update MyBills to handle new service schema
+- [ ] Test service fetching and display
+- [ ] Test appointment booking with new service types
+- [ ] Test bill display with updated service references

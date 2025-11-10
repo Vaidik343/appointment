@@ -13,7 +13,8 @@ const DoctorCard = ({ doctor }) => {
   const navigate = useNavigate();
 
   const handleBook = () => {
-    navigate(`/book-appointment/${doctor.id}`);
+  navigate(`/book-appointment/doctor/${doctor.id}`);
+
   };
 
   return (

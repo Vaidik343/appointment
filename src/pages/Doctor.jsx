@@ -4,11 +4,7 @@ import DoctorCard from "../components/DoctorCard";
 import { Box, Grid, Typography, CircularProgress } from "@mui/material";
 
 const Doctor = () => {
-  const { doctor, loading, fetchDoctor } = useDoctor();
-
-  useEffect(() => {
-    fetchDoctor();
-  }, []);
+  const { doctor, loading } = useDoctor();
 
   if (loading)
     return (

@@ -6,6 +6,7 @@ import {
   Button,
   CardActions,
   Box,
+  Chip,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
@@ -13,7 +14,8 @@ const ServiceCard = ({ services }) => {
   const navigate = useNavigate();
 
   const handleBook = () => {
-    navigate(`/book-appointment/${services.id}`);
+navigate(`/book-appointment/service/${services.id}`);
+
   };
 
   return (
@@ -30,17 +32,30 @@ const ServiceCard = ({ services }) => {
       }}
     >
       <CardContent>
-        <Typography
-          variant="h6"
-          fontWeight="bold"
-          color="primary"
-          gutterBottom
-        >
-          {services.name}
-        </Typography>
+        <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+          <Typography
+            variant="h6"
+            fontWeight="bold"
+            color="primary"
+            gutterBottom
+          >
+            {services.name}
+          </Typography>
+          <Chip
+            label={services.type === 'general' ? services.category : 'Doctor Service'}
+            size="small"
+            color={services.type === 'general' ? 'primary' : 'secondary'}
+            variant="outlined"
+          />
+        </Box>
         <Typography variant="body1" color="text.secondary">
           Cost: ₹{services.cost}
         </Typography>
+        {services.type === 'doctor' && services.doctor && (
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+            Doctor: {services.doctor.name} ({services.doctor.specialization})
+          </Typography>
+        )}
       </CardContent>
 
       <CardActions>

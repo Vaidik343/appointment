@@ -133,11 +133,15 @@ const MyBills = () => {
                             <TableBody>
                               {bill.items?.map((item) => (
                                 <TableRow key={item.id}>
-                                  <TableCell>{item.service?.name}</TableCell>
-                                  <TableCell>₹{item.service?.cost}</TableCell>
+                                  <TableCell>
+                                    {item.service?.name || item.general_service?.name || item.doctor_service?.name}
+                                  </TableCell>
+                                  <TableCell>
+                                    ₹{item.service?.cost || item.general_service?.cost || item.doctor_service?.cost}
+                                  </TableCell>
                                   <TableCell>{item.quantity}</TableCell>
                                   <TableCell>
-                                    ₹{item.quantity * item.service?.cost}
+                                    ₹{item.quantity * (item.service?.cost || item.general_service?.cost || item.doctor_service?.cost)}
                                   </TableCell>
                                 </TableRow>
                               ))}

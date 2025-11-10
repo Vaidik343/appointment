@@ -9,12 +9,16 @@ import {
   Button,
   Stack,
   Divider,
+  Select,
+  FormControl,
+  InputLabel,
+  Chip,
 } from "@mui/material";
 import { useDoctor } from "../context/DoctorContext";
 import { useAppointment } from "../context/AppointmentContext";
 import { useService } from "../context/ServiceContext";
 import { usePatient } from "../context/PatientContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import Lottie from "lottie-react";
 import uploadCompleteAnimation from "../assets/Upload Complete.json";
@@ -22,20 +26,33 @@ import uploadCompleteAnimation from "../assets/Upload Complete.json";
 const AppointmentForm = () => {
   const { doctor, fetchDoctor } = useDoctor();
   const { createAppointment, loading } = useAppointment();
-  const { services, fetchService } = useService();
+  const { services, generalServices, doctorServices, fetchService } = useService();
   const { patient } = usePatient();
+  
+  const {doctorId,serviceId} = useParams();
+
 
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
-    doctor_id: "",
-    service_id: "",
+    doctor_id: doctorId || "",
+    service_id: serviceId || "",
+    selectedServices: [],
     start_time: "",
     end_time: "",
   });
 
+  const [availableServices, setAvailableServices] = useState([]);
+
   const [isSuccess, setIsSuccess] = useState(false); // ✅ success state
 
+  useEffect(() => {
+    setForm(prev => ({
+      ...prev,
+      doctor_id: doctorId || prev.doctor_id,
+     selectedServices: serviceId ? [serviceId] : prev.selectedServices,
+    }));
+  }, [doctorId, serviceId]);
   useEffect(() => {
     if (!patient) {
       toast.error("Please log in to book an appointment");
@@ -48,25 +65,46 @@ const AppointmentForm = () => {
     fetchService();
   }, []);
 
+  // Update available services when doctor is selected or services loaded
+  useEffect(() => {
+    if (form.doctor_id) {
+      const selectedDoctorServices = doctorServices.filter(service => service.doctor_id === form.doctor_id);
+      setAvailableServices([...generalServices, ...selectedDoctorServices]);
+    } else {
+      setAvailableServices(generalServices);
+    }
+  }, [form.doctor_id, generalServices, doctorServices]);
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleServiceChange = (event) => {
+    const { value } = event.target;
+    setForm({ ...form, selectedServices: value });
+  };
+
+  const handleRemoveService = (serviceId) => {
+    setForm(prev => ({
+      ...prev,
+      selectedServices: prev.selectedServices.filter(id => id !== serviceId)
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!form.doctor_id || !form.start_time || !form.end_time) {
+    if (!form.doctor_id || !form.start_time || !form.end_time || form.selectedServices.length === 0) {
       toast.error("Please fill all required fields");
       return;
     }
 
     const payload = {
       patient_id: patient?.id,
-      service_id: form.service_id,
       doctor_id: form.doctor_id,
       start_time: form.start_time,
       end_time: form.end_time,
-      status: "Scheduled",
+      services: form.selectedServices.map(serviceId => ({ service_id: serviceId, quantity: 1 })),
     };
 
     const apt = await createAppointment(payload);
@@ -77,10 +115,7 @@ const AppointmentForm = () => {
 
   if (isSuccess) {
     return (
-     
-
-      
-      <Box 
+      <Box
         sx={{
           display: "flex",
           flexDirection: "column",
@@ -89,7 +124,6 @@ const AppointmentForm = () => {
           height: "50vh",
           textAlign: "center",
           mt: 4,
-       
         }}
       >
         <Lottie
@@ -103,10 +137,7 @@ const AppointmentForm = () => {
         <Typography variant="body2" color="text.secondary" mt={1}>
           Your appointment has been successfully booked
         </Typography>
-
-       
       </Box>
-     
     );
   }
 
@@ -140,22 +171,38 @@ const AppointmentForm = () => {
             </Grid>
 
             <Grid size={{ xs: 12, sm: 6 }}>
-              <TextField
-                fullWidth
-                select
-                label="Select Service"
-                name="service_id"
-                value={form.service_id}
-                onChange={handleChange}
-                required
-              >
-                <MenuItem value="">-- Choose Service --</MenuItem>
-                {services?.map((srv) => (
-                  <MenuItem key={srv.id} value={srv.id}>
-                    {srv.name} – ₹{srv.cost}
-                  </MenuItem>
-                ))}
-              </TextField>
+              <FormControl fullWidth required>
+                <InputLabel>Select Services</InputLabel>
+                <Select
+                  multiple
+                  value={form.selectedServices}
+                  onChange={handleServiceChange}
+                  renderValue={(selected) => (
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                      {selected.map((value) => {
+                        const service = availableServices?.find(s => s.id === value);
+                        return (
+                          <Chip
+                            key={value}
+                            label={service ? service.name : value}
+                             onMouseDown={(e) => e.stopPropagation()}
+                           onDelete={(e) => {
+            e.stopPropagation(); // 🛑 stop bubbling
+            handleRemoveService(value);
+          }}
+                          />
+                        );
+                      })}
+                    </Box>
+                  )}
+                >
+                  {availableServices?.map((srv) => (
+                    <MenuItem key={srv.id} value={srv.id}>
+                      {srv.name} – ₹{srv.cost} {srv.type === 'doctor' ? `(Dr. ${srv.doctorName})` : ''}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             </Grid>
 
             {/* Row 2: Start + End Time */}

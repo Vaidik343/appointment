@@ -1,14 +1,10 @@
 import React, { useEffect } from "react";
 import { useService } from "../context/ServiceContext";
 import ServiceCard from "../components/ServiceCard";
-import { Box, Typography, CircularProgress } from "@mui/material";
+import { Box, Typography, CircularProgress, Divider } from "@mui/material";
 
 const Service = () => {
-  const { services, loading, fetchService } = useService();
-
-  useEffect(() => {
-    fetchService();
-  }, []);
+  const { generalServices, doctorServices, loading } = useService();
 
   if (loading)
     return (
@@ -29,20 +25,60 @@ const Service = () => {
         Available Services
       </Typography>
 
-      <Box
-        display="flex"
-        flexWrap="wrap"
-        justifyContent="center"
-        gap={2}
-        sx={{ mt: 2 }}
-      >
-        {services?.length > 0 ? (
-          services.map((s) => <ServiceCard key={s.id} services={s} />)
-        ) : (
-          <Typography variant="body1" color="text.secondary">
-            No services available.
-          </Typography>
-        )}
+      {/* General Services Section */}
+      <Box sx={{ mt: 4 }}>
+        <Typography
+          variant="h5"
+          color="secondary"
+          fontWeight="bold"
+          gutterBottom
+        >
+          General Services
+        </Typography>
+        <Box
+          display="flex"
+          flexWrap="wrap"
+          justifyContent="center"
+          gap={2}
+          sx={{ mt: 2 }}
+        >
+          {generalServices?.length > 0 ? (
+            generalServices.map((s) => <ServiceCard key={s.id} services={s} />)
+          ) : (
+            <Typography variant="body1" color="text.secondary">
+              No general services available.
+            </Typography>
+          )}
+        </Box>
+      </Box>
+
+      <Divider sx={{ my: 4 }} />
+
+      {/* Doctor Services Section */}
+      <Box sx={{ mt: 4 }}>
+        <Typography
+          variant="h5"
+          color="secondary"
+          fontWeight="bold"
+          gutterBottom
+        >
+          Doctor-Specific Services
+        </Typography>
+        <Box
+          display="flex"
+          flexWrap="wrap"
+          justifyContent="center"
+          gap={2}
+          sx={{ mt: 2 }}
+        >
+          {doctorServices?.length > 0 ? (
+            doctorServices.map((s) => <ServiceCard key={s.id} services={s} />)
+          ) : (
+            <Typography variant="body1" color="text.secondary">
+              No doctor-specific services available.
+            </Typography>
+          )}
+        </Box>
       </Box>
     </Box>
   );
